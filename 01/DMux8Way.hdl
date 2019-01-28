@@ -9,6 +9,16 @@
  *                            {0, in, 0, 0, 0, 0, 0, 0} if sel == 001
  *                            etc.
  *                            {0, 0, 0, 0, 0, 0, 0, in} if sel == 111
+ *
+ * Selectors to outputs:
+ *      000 => a
+ *      001 => b
+ *      010 => c
+ *      011 => d
+ *      100 => e
+ *      101 => f
+ *      110 => g
+ *      111 => h
  */
 
 CHIP DMux8Way {
@@ -16,5 +26,33 @@ CHIP DMux8Way {
     OUT a, b, c, d, e, f, g, h;
 
     PARTS:
-    // Put your code here:
+    Not(in=sel[0], out=ns0);
+    Not(in=sel[1], out=ns1);
+    Not(in=sel[2], out=ns2);
+
+    And(a=ns0, b=ns1, out=wae);
+    And(a=wae, b=ns2, out=wA);
+    And(a=wae, b=sel[2], out=wE);
+
+    And(a=sel[0], b=ns1, out=wbf);
+    And(a=wbf, b=ns2, out=wB);
+    And(a=wbf, b=sel[2], out=wF);
+
+    And(a=ns0, b=sel[1], out=wcg);
+    And(a=wcg, b=ns2, out=wC);
+    And(a=wcg, b=sel[2], out=wG);
+
+    And(a=sel[0], b=sel[1], out=wdh);
+    And(a=wdh, b=ns2, out=wD);
+    And(a=wdh, b=sel[2], out=wH);
+
+
+    And(a=wA, b=in, out=a);
+    And(a=wB, b=in, out=b);
+    And(a=wC, b=in, out=c);
+    And(a=wD, b=in, out=d);
+    And(a=wE, b=in, out=e);
+    And(a=wF, b=in, out=f);
+    And(a=wG, b=in, out=g);
+    And(a=wH, b=in, out=h);
 }
