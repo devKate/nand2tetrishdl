@@ -9,12 +9,23 @@
  *       b if sel == 01
  *       c if sel == 10
  *       d if sel == 11
+ * NOTE: the numbers are little endian, sel[0] is the rightmost bit
  */
-
 CHIP Mux4Way16 {
     IN a[16], b[16], c[16], d[16], sel[2];
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+        Not(in=sel[0], out=ns0);
+        Not(in=sel[1], out=ns1);
+
+        And(a=ns0, b=ns1, out=wa);
+        And(a=sel[0], b=ns1, out=wb);
+        And(a=ns0, b=sel[1], out=wc);
+        And(a=sel[0], b=sel[1], out=wd);
+
+        Mux16(a=b, b=a, sel=wa, out=m0);
+        Mux16(a=m0, b=b, sel=wb, out=m1);
+        Mux16(a=m1, b=c, sel=wc, out=m2);
+        Mux16(a=m2, b=d, sel=wd, out=out);
 }

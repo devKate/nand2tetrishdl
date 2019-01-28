@@ -5,7 +5,7 @@
 
 /**
  * Not gate:
- * out = not in
+ * out = NOT in
  */
 
 CHIP Not {
